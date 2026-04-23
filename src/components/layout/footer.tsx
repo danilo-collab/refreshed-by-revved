@@ -3,10 +3,10 @@ import { Logo } from "@/components/icons/logo";
 import { Globe, Camera, Phone, Mail, MapPin } from "lucide-react";
 
 const serviceLinks = [
-  { href: "#", label: "Exterior Detail" },
-  { href: "#", label: "Interior Rejuvenation" },
-  { href: "#", label: "Ceramic Coating" },
-  { href: "#", label: "Paint Correction" },
+  { href: "/booking", label: "Essential Wash" },
+  { href: "/booking", label: "Full Detail" },
+  { href: "/booking", label: "VIP Showroom Detail" },
+  { href: "/booking", label: "Monthly Plan" },
 ];
 
 export function Footer() {

@@ -4,39 +4,54 @@ import Link from "next/link";
 
 const plans = [
   {
-    tier: "Maintenance",
-    name: "Essential",
-    price: "$149",
+    tier: "Quick Clean",
+    name: "Essential Wash",
+    price: "$99.99",
     features: [
-      "pH Neutral Foam Wash",
-      "Interior Vacuum & Dust",
-      "Tire & Rim Degrease",
-      "Window Streak-Free Finish",
+      "Interior Blow Out + Vacuum",
+      "Interior Wipe Down",
+      "Wheel Wash",
+      "Complete Foam Bath",
+      "Tire Shine",
     ],
     featured: false,
   },
   {
-    tier: "High Velocity",
-    name: "Executive",
-    price: "$249",
+    tier: "Deep Clean",
+    name: "Full Detail",
+    price: "$179.99",
     features: [
       "Everything in Essential",
-      "Clay Bar Decon",
-      "Leather Conditioning",
-      "Engine Bay Detail",
-      "High-Gloss Paint Sealant",
+      "Interior Contact Wash",
+      "Interior Trim Cleanse",
+      "Steering Wheel Cleanse",
+      "Floor Mat Treatment",
+      "Wheel Wells & Brake Cleanse",
     ],
     featured: true,
   },
   {
-    tier: "Showroom",
-    name: "Signature",
-    price: "$399",
+    tier: "Premium",
+    name: "VIP Showroom",
+    price: "$284.99",
     features: [
-      "Everything in Executive",
-      "Stage 1 Paint Correction",
-      "Full Interior Extraction",
-      "Ceramic Coating Booster",
+      "Everything in Full Detail",
+      "Carpet & Floor Mat Extraction",
+      "Full Paint Decontamination",
+      "Complete Vehicle Ceramic Coating",
+    ],
+    featured: false,
+  },
+  {
+    tier: "Subscription",
+    name: "Monthly Plan",
+    price: "$249.99",
+    priceLabel: "/mo",
+    features: [
+      "4 Essential Washes per month",
+      "Priority Scheduling",
+      "Cancel Anytime",
+      "Best Value for Regulars",
     ],
     featured: false,
   },
@@ -55,12 +70,14 @@ export function PricingSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 machined-border">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 machined-border">
           {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`p-10 ${
-                index < 2 ? "border-r border-outline-variant" : ""
+              className={`p-8 ${
+                index < 3 ? "lg:border-r border-outline-variant" : ""
+              } ${
+                index < 2 ? "md:border-r lg:border-r" : ""
               } ${
                 plan.featured
                   ? "bg-surface-container-high relative"
@@ -85,10 +102,10 @@ export function PricingSection() {
                 </h3>
               </div>
 
-              <div className="text-4xl font-bold text-white mb-8 font-headline not-italic">
+              <div className="text-3xl font-bold text-white mb-8 font-headline not-italic">
                 {plan.price}{" "}
                 <span className="text-sm font-normal text-outline">
-                  / detail
+                  {(plan as { priceLabel?: string }).priceLabel || "/ detail"}
                 </span>
               </div>
 

@@ -51,21 +51,28 @@ const MOCK_SERVICES: Service[] = [
     name: "Essential Wash",
     price: 99.99,
     durationMinutes: 60,
-    description: "Interior Blow Out + Vacuum, Wipe Down, Wheel Wash, Foam Bath, Tire Shine",
+    description: "Interior Blow Out + Vacuum, Wipe Down, Wheel Wash, Complete Foam Bath, Tire Shine",
   },
   {
     id: "2",
     name: "Full Detail",
     price: 179.99,
     durationMinutes: 120,
-    description: "Everything in Essential plus Interior Contact Wash, Trim Cleanse, Wheel Foam Bath, Paint Decontamination",
+    description: "Everything in Essential plus Interior Contact Wash, Trim Cleanse, Steering Wheel Cleanse, Floor Mat Treatment, Wheel Wells & Brake Cleanse, Wheel Foam Bath, Contactless Pre Wash",
   },
   {
     id: "3",
     name: "VIP Showroom Detail",
     price: 284.99,
     durationMinutes: 180,
-    description: "Complete interior & exterior rejuvenation with Ceramic Coating",
+    description: "Everything in Full Detail plus Carpet & Floor Mat Extraction, Full Paint Decontamination, Complete Vehicle Ceramic Coating",
+  },
+  {
+    id: "4",
+    name: "Monthly Plan",
+    price: 249.99,
+    durationMinutes: 60,
+    description: "4 Essential Washes per month - Subscription-based recurring service",
   },
 ];
 

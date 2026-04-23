@@ -3,27 +3,27 @@ import Link from "next/link";
 
 const services = [
   {
-    title: "Exterior Restoration",
+    title: "Essential Wash",
     description:
-      "Foam cannon bath, clay bar decontamination, and high-gloss ceramic wax seal.",
-    price: "$149+",
+      "Interior Blow Out + Vacuum, Wipe Down, Wheel Wash, Complete Foam Bath, Tire Shine.",
+    price: "$99.99",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBFXUP9TLr1OqHGgpylashkvyFVocLwNYoC79jqx_XJaBc7HSv6u4uWHa5yvZsXs67vgbAYH20RwnaExoABU1qtOZTovedXjz_gMyBciaVKHPHL-QV6_IVzMcKAk8XEJzcKIUi3HkUqELNIWl3AP2E-VCCRLTJkbwVo3JVGDQWlscyY9NT4tyMwpcZJTdxgtuP5ORtAqSvXSN5z5GJrOOdNL5eW489ye6UUS2shk8C8nXDVVAj5SQNNVGGwqUHSq3bHixqF4WKCKrY",
+  },
+  {
+    title: "Full Detail",
+    description:
+      "Everything in Essential plus Interior Contact Wash, Trim Cleanse, Wheel Foam Bath, and more.",
+    price: "$179.99",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCuLxJvvC7-lSQJ7KeoMuYbuhofd5A4N49S0cgllIt9pV4k-t9K-J81WA6j7NEw-lh6QxTSqy5pNeLv0wcDrkwUwcyMkmPtbSpGkK2daQR6TEZ2UuZUcPwnoejF8HclXwJzPLTPruI2dJwsbMZWVujrISpAh5ezY8Ajl8gfz3ROy2FxTPrjgx5ojHg2sXmxpAB3WudiN6EBBnd8CoxcDTLz6KpJwyhX9ael84MX_05iANCyrODhc9r3smd5922fsDN2wPQjzBucWNo",
     badge: "MOST POPULAR",
   },
   {
-    title: "Interior Car Detailing",
+    title: "VIP Showroom Detail",
     description:
-      "Steam sterilization, deep extraction, and premium leather hydration for a new-car feel.",
-    price: "$129+",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCuLxJvvC7-lSQJ7KeoMuYbuhofd5A4N49S0cgllIt9pV4k-t9K-J81WA6j7NEw-lh6QxTSqy5pNeLv0wcDrkwUwcyMkmPtbSpGkK2daQR6TEZ2UuZUcPwnoejF8HclXwJzPLTPruI2dJwsbMZWVujrISpAh5ezY8Ajl8gfz3ROy2FxTPrjgx5ojHg2sXmxpAB3WudiN6EBBnd8CoxcDTLz6KpJwyhX9ael84MX_05iANCyrODhc9r3smd5922fsDN2wPQjzBucWNo",
-  },
-  {
-    title: "Full Showroom Package",
-    description:
-      "The ultimate mobile detailing miami experience. Total rejuvenation inside and out.",
-    price: "$299+",
+      "Complete interior & exterior rejuvenation with Full Paint Decontamination and Ceramic Coating.",
+    price: "$284.99",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuCu49TbrV4EskusIGSaYydVDK53Cj3oVjXnld0fIPR-Z7n6iLQ7yVXKPdFWAchuRJZmPUV1ZGRkjiMQEph5JPU8WsPHppsT78OmXh_l9O6y9QOqRnAYS2M0x3UVcxnsKpd8_-uAA2fQqfeehZ0uqfiSj96r5tIMLIIfpzO88Z3QVfgqerVWfTkzvu9obcN4_aMYi3TnroA2lDs-Ev7QmN6y5OI5b-tlKqZtXHvVu1UbFQHkolRgju0dOWVTFIXBYOuhBHPktnfmno8",
   },
