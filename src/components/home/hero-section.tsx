@@ -75,23 +75,9 @@ export function HeroSection() {
       {/* Content */}
       <div className="relative z-20 max-w-[1280px] mx-auto px-5 w-full">
         <div className="max-w-4xl">
-          {/* Live Operations Badge */}
-          <motion.div
-            custom={0}
-            variants={fadeUpVariants}
-            initial="hidden"
-            animate="visible"
-            className="inline-flex items-center gap-2 bg-primary-container/10 border border-primary-container/30 px-3 py-1 mb-4"
-          >
-            <span className="size-2 rounded-full bg-primary-container animate-pulse" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary-container">
-              Live Operations: Miami, FL
-            </span>
-          </motion.div>
-
           {/* Main Heading */}
           <motion.h1
-            custom={1}
+            custom={0}
             variants={fadeUpVariants}
             initial="hidden"
             animate="visible"
@@ -104,7 +90,7 @@ export function HeroSection() {
 
           {/* Subheading */}
           <motion.p
-            custom={2}
+            custom={1}
             variants={fadeUpVariants}
             initial="hidden"
             animate="visible"
@@ -118,7 +104,7 @@ export function HeroSection() {
 
           {/* CTAs */}
           <motion.div
-            custom={3}
+            custom={2}
             variants={fadeUpVariants}
             initial="hidden"
             animate="visible"
