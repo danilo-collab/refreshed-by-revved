@@ -17,7 +17,7 @@ export function HeroSection() {
       </div>
 
       <div className="relative z-20 max-w-[1280px] mx-auto px-5 w-full">
-        <div className="max-w-2xl fast-fade-in">
+        <div className="max-w-4xl fast-fade-in">
           {/* Live Operations Badge */}
           <div className="inline-flex items-center gap-2 bg-primary-container/10 border border-primary-container/30 px-3 py-1 mb-6">
             <span className="size-2 rounded-full bg-primary-container animate-pulse" />
