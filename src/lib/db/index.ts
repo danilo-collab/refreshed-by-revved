@@ -1,8 +1,25 @@
 import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle, NeonHttpDatabase } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql, { schema });
+let _db: NeonHttpDatabase<typeof schema> | null = null;
 
-export type DbClient = typeof db;
+export function getDb() {
+  if (!_db) {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is not set");
+    }
+    const sql = neon(process.env.DATABASE_URL);
+    _db = drizzle(sql, { schema });
+  }
+  return _db;
+}
+
+// Lazy getter for backwards compatibility
+export const db = new Proxy({} as NeonHttpDatabase<typeof schema>, {
+  get(_, prop) {
+    return (getDb() as Record<string | symbol, unknown>)[prop];
+  },
+});
+
+export type DbClient = NeonHttpDatabase<typeof schema>;
