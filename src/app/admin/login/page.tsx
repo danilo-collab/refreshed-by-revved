@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Logo } from "@/components/icons/logo";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Mail, Lock, AlertCircle } from "lucide-react";
 
@@ -43,7 +43,15 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Logo className="size-12 mx-auto mb-4" />
+          <div className="size-16 rounded-full overflow-hidden border-2 border-primary-container/30 mx-auto mb-4">
+            <Image
+              src="/logo.jpg"
+              alt="Revved Detailing"
+              width={64}
+              height={64}
+              className="object-cover"
+            />
+          </div>
           <h1 className="text-2xl font-bold">Admin Login</h1>
           <p className="text-on-surface-variant mt-2 normal-case not-italic">
             Sign in to manage Revved Detailing

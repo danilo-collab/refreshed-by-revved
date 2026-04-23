@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ServiceSelection } from "./service-selection";
 import { AddonSelection } from "./addon-selection";
 import { LocationInput } from "./location-input";
@@ -44,46 +44,12 @@ const STEPS = [
   { id: 5, label: "Details" },
 ];
 
-// Mock services - will be fetched from API
-const MOCK_SERVICES: Service[] = [
-  {
-    id: "1",
-    name: "Essential Wash",
-    price: 99.99,
-    durationMinutes: 60,
-    description: "Interior Blow Out + Vacuum, Wipe Down, Wheel Wash, Complete Foam Bath, Tire Shine",
-  },
-  {
-    id: "2",
-    name: "Full Detail",
-    price: 179.99,
-    durationMinutes: 120,
-    description: "Everything in Essential plus Interior Contact Wash, Trim Cleanse, Steering Wheel Cleanse, Floor Mat Treatment, Wheel Wells & Brake Cleanse, Wheel Foam Bath, Contactless Pre Wash",
-  },
-  {
-    id: "3",
-    name: "VIP Showroom Detail",
-    price: 284.99,
-    durationMinutes: 180,
-    description: "Everything in Full Detail plus Carpet & Floor Mat Extraction, Full Paint Decontamination, Complete Vehicle Ceramic Coating",
-  },
-  {
-    id: "4",
-    name: "Monthly Plan",
-    price: 249.99,
-    durationMinutes: 60,
-    description: "4 Essential Washes per month - Subscription-based recurring service",
-  },
-];
-
-const MOCK_ADDONS: Addon[] = [
-  { id: "a1", name: "Engine Bay Detail", price: 49.99, durationMinutes: 30 },
-  { id: "a2", name: "Headlight Restoration", price: 79.99, durationMinutes: 45 },
-  { id: "a3", name: "Odor Elimination", price: 39.99, durationMinutes: 20 },
-  { id: "a4", name: "Pet Hair Removal", price: 29.99, durationMinutes: 30 },
-];
-
 export function BookingWizard() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [addons, setAddons] = useState<Addon[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingData, setBookingData] = useState<BookingData>({
     service: null,
@@ -96,6 +62,54 @@ export function BookingWizard() {
     customerEmail: "",
     customerPhone: "",
   });
+
+  // Fetch products and addons from API
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch("/api/products");
+        if (!response.ok) throw new Error("Failed to fetch products");
+        const data = await response.json();
+
+        // Transform API data to match component interfaces
+        const transformedServices: Service[] = data.products.map((p: {
+          id: string;
+          name: string;
+          price: string;
+          durationMinutes: number;
+          shortDescription: string | null;
+        }) => ({
+          id: p.id,
+          name: p.name,
+          price: parseFloat(p.price),
+          durationMinutes: p.durationMinutes,
+          description: p.shortDescription || "",
+        }));
+
+        const transformedAddons: Addon[] = data.addons.map((a: {
+          id: string;
+          name: string;
+          price: string;
+          durationMinutes: number;
+        }) => ({
+          id: a.id,
+          name: a.name,
+          price: parseFloat(a.price),
+          durationMinutes: a.durationMinutes,
+        }));
+
+        setServices(transformedServices);
+        setAddons(transformedAddons);
+      } catch (err) {
+        setError("Failed to load services. Please refresh the page.");
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   const updateBookingData = (data: Partial<BookingData>) => {
     setBookingData((prev) => ({ ...prev, ...data }));
@@ -135,9 +149,50 @@ export function BookingWizard() {
   };
 
   const handleSubmit = async () => {
-    // TODO: Submit booking to API
-    console.log("Submitting booking:", bookingData);
-    alert("Booking submitted! (API integration pending)");
+    if (!bookingData.service || !bookingData.date) return;
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Parse time and create scheduled date/end date
+      const [hours, minutes] = bookingData.time.split(":").map(Number);
+      const scheduledDate = new Date(bookingData.date);
+      scheduledDate.setHours(hours, minutes, 0, 0);
+
+      const scheduledEndDate = new Date(scheduledDate);
+      scheduledEndDate.setMinutes(scheduledEndDate.getMinutes() + totalDuration);
+
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: bookingData.service.id,
+          customerName: bookingData.customerName,
+          customerEmail: bookingData.customerEmail,
+          customerPhone: bookingData.customerPhone,
+          address: bookingData.address,
+          addressNotes: bookingData.addressNotes || undefined,
+          scheduledDate: scheduledDate.toISOString(),
+          scheduledEndDate: scheduledEndDate.toISOString(),
+          totalPrice: totalPrice.toFixed(2),
+          totalDurationMinutes: totalDuration,
+          addonIds: bookingData.addons.map((a) => a.id),
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to create booking");
+      }
+
+      const booking = await response.json();
+      // Redirect to checkout
+      window.location.href = `/api/checkout/${booking.id}`;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit booking");
+      setIsSubmitting(false);
+    }
   };
 
   const totalPrice =
@@ -148,10 +203,42 @@ export function BookingWizard() {
     (bookingData.service?.durationMinutes || 0) +
     bookingData.addons.reduce((sum, addon) => sum + addon.durationMinutes, 0);
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="size-12 border-4 border-primary-container border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-on-surface-variant">Loading services...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && services.length === 0) {
+    return (
+      <div className="machined-border bg-surface-container-low p-8 text-center">
+        <p className="text-error mb-4">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-3 bg-primary-container text-on-primary font-bold chamfer-clip"
+        >
+          TRY AGAIN
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Main Content */}
       <div className="lg:col-span-2">
+        {/* Error Banner */}
+        {error && (
+          <div className="bg-error/10 border border-error/30 text-error px-4 py-3 mb-6 rounded">
+            {error}
+          </div>
+        )}
+
         {/* Step Indicators */}
         <div className="flex items-center justify-between mb-8">
           {STEPS.map((step, index) => (
@@ -196,14 +283,14 @@ export function BookingWizard() {
         <div className="machined-border bg-surface-container-low p-6 md:p-8">
           {currentStep === 1 && (
             <ServiceSelection
-              services={MOCK_SERVICES}
+              services={services}
               selectedService={bookingData.service}
               onSelect={(service) => updateBookingData({ service })}
             />
           )}
           {currentStep === 2 && (
             <AddonSelection
-              addons={MOCK_ADDONS}
+              addons={addons}
               selectedAddons={bookingData.addons}
               onToggle={(addon) => {
                 const exists = bookingData.addons.find((a) => a.id === addon.id);
@@ -277,15 +364,22 @@ export function BookingWizard() {
             ) : (
               <button
                 onClick={handleSubmit}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
                 className={cn(
-                  "px-8 py-3 font-bold chamfer-clip transition-all",
-                  canProceed()
+                  "px-8 py-3 font-bold chamfer-clip transition-all flex items-center gap-2",
+                  canProceed() && !isSubmitting
                     ? "bg-primary-container text-on-primary cyan-glow hover:bg-primary-container/90"
                     : "bg-surface-container text-outline cursor-not-allowed"
                 )}
               >
-                CONFIRM BOOKING
+                {isSubmitting ? (
+                  <>
+                    <div className="size-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                    PROCESSING...
+                  </>
+                ) : (
+                  "CONFIRM BOOKING"
+                )}
               </button>
             )}
           </div>
