@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Logo } from "@/components/icons/logo";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -18,8 +18,16 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-outline-variant px-5 py-4">
       <div className="max-w-[1280px] mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <Logo className="size-8" />
+        <Link href="/" className="flex items-center gap-2">
+          <div className="size-9 rounded-full overflow-hidden border border-primary-container/30">
+            <Image
+              src="/logo.jpg"
+              alt="Revved Detailing"
+              width={36}
+              height={36}
+              className="object-cover"
+            />
+          </div>
           <span className="text-xl font-bold tracking-tighter font-headline text-on-surface normal-case not-italic">
             Revved Detailing
           </span>
