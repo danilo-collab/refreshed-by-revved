@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Preloader } from "@/components/ui/preloader";
 import {
   HeroSection,
   StatsBar,
@@ -15,6 +16,7 @@ import {
 export default function Home() {
   return (
     <>
+      <Preloader />
       <Header />
       <main>
         <HeroSection />
