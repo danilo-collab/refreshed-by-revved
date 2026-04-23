@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Revved Detailing | Miami's Premium Mobile Car Detailing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-container": "#006970",
+                        "tertiary-container": "#dcd9d8",
+                        "surface-tint": "#00dbe9",
+                        "surface-bright": "#3a3939",
+                        "inverse-primary": "#006970",
+                        "outline-variant": "#3b494b",
+                        "on-error": "#690005",
+                        "tertiary": "#f9f5f5",
+                        "secondary-fixed-dim": "#c1c7cf",
+                        "error": "#ffb4ab",
+                        "secondary": "#c1c7cf",
+                        "secondary-container": "#41474e",
+                        "on-primary-fixed": "#002022",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#7df4ff",
+                        "on-secondary-container": "#afb6bd",
+                        "surface-container": "#201f1f",
+                        "outline": "#849495",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353534",
+                        "surface": "#131313",
+                        "on-primary": "#00363a",
+                        "inverse-on-surface": "#313030",
+                        "primary-container": "#00f0ff",
+                        "error-container": "#93000a",
+                        "on-secondary": "#2b3137",
+                        "on-secondary-fixed": "#161c22",
+                        "on-background": "#e5e2e1",
+                        "surface-variant": "#353534",
+                        "on-tertiary-container": "#605f5e",
+                        "primary-fixed-dim": "#00dbe9",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-primary-fixed-variant": "#004f54",
+                        "secondary-fixed": "#dde3eb",
+                        "surface-dim": "#131313",
+                        "on-secondary-fixed-variant": "#41474e",
+                        "on-surface-variant": "#b9cacb",
+                        "on-tertiary": "#313030",
+                        "primary": "#dbfcff",
+                        "background": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-surface": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "margin": "20px",
+                        "xl": "40px",
+                        "unit": "4px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+        .cyan-glow {
+            box-shadow: 0 0 15px rgba(0, 221, 233, 0.3);
+        }
+        .machined-border {
+            border: 1px solid rgba(132, 148, 149, 0.2);
+        }
+        .chamfer-clip {
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        .fast-fade-in {
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- WhatsApp Floating Button -->
+<a class="fixed bottom-8 right-8 z-50 bg-[#25D366] p-4 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center" href="#">
+<svg class="w-8 h-8 text-white" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+</a>
+<!-- Main Navigation Header -->
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-outline-variant px-margin py-4">
+<div class="max-w-[1280px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary-container">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tighter headline text-on-surface">Revved Detailing</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary-container transition-colors" href="#services">Services</a>
+<a class="text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary-container transition-colors" href="#pricing">Pricing</a>
+<a class="text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary-container transition-colors" href="#locations">Locations</a>
+<button class="bg-primary-container text-on-primary font-bold px-6 py-2 chamfer-clip cyan-glow active:scale-95 transition-all">
+                    BOOK NOW
+                </button>
+</nav>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative min-h-[870px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10"></div>
+<div class="w-full h-full bg-center bg-cover" data-alt="Close-up of a high-end black sports car being detailed in a modern garage with cinematic cyan lighting and wet gloss finish" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRhTswY1vWyJs20U8WC2MWWaldCnbirzrWoMFKmMtY-YddxTZfRj4DBvhUY-C4b8WZC8zkWknbQ5qIR03shouO1xylT-HLYv3I1wHkUUDE9FNSTb3_RnR0zaTubtVjl8pUkZDA5rzOsYO2DEJyfLgwFjoXBM9NkRxMcMuIXWMsQhfQW_z4hhcy-1ZpE5sX4YeLw41uV-cekm0-f3qADzRIzYAo3ewcFgndg_ifoWslLFVMZQeQLDm5ACCIOsj3Fj0ZEvnxX7tbdGk')"></div>
+</div>
+<div class="relative z-20 max-w-[1280px] mx-auto px-margin w-full">
+<div class="max-w-2xl fast-fade-in">
+<div class="inline-flex items-center gap-2 bg-primary-container/10 border border-primary-container/30 px-3 py-1 mb-6">
+<span class="size-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary-container">Live Operations: Miami, FL</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-bold leading-[0.9] mb-6 text-on-surface">
+                    Miami’s Premium <span class="text-primary-container">Mobile Car Detailing</span> &amp; Showroom Finishes
+                </h1>
+<p class="text-lg text-on-surface-variant mb-10 max-w-xl font-body">
+                    Experience the absolute best mobile car detailing Miami has to offer. We bring elite interior car detailing and ceramic restoration directly to your location. Performance results for performance machines.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary-container text-on-primary font-black text-lg px-10 py-4 chamfer-clip cyan-glow hover:translate-x-1 transition-transform">
+                        BOOK DETAIL NOW
+                    </button>
+<button class="border border-outline-variant bg-surface-container-low text-white font-bold px-10 py-4 chamfer-clip hover:bg-surface-container-high transition-colors">
+                        VIEW SERVICES
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Bar -->
+<div class="bg-surface-container-lowest border-y border-outline-variant py-8">
+<div class="max-w-[1280px] mx-auto px-margin grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="text-center">
+<div class="text-3xl font-bold text-primary-container">1,200+</div>
+<div class="text-[10px] uppercase tracking-widest text-outline">Vehicles Revved</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-primary-container">4.9/5</div>
+<div class="text-[10px] uppercase tracking-widest text-outline">Miami Reviews</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-primary-container">100%</div>
+<div class="text-[10px] uppercase tracking-widest text-outline">Mobile Service</div>
+</div>
+<div class="text-center">
+<div class="text-3xl font-bold text-primary-container">2HR</div>
+<div class="text-[10px] uppercase tracking-widest text-outline">Avg Response</div>
+</div>
+</div>
+</div>
+<!-- Services Section -->
+<section class="py-xl bg-surface" id="services">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div>
+<h2 class="text-4xl font-bold text-on-surface mb-4">Our Mobile Car Detailing Services in Miami</h2>
+<p class="text-on-surface-variant max-w-xl">Precision-driven packages designed for car detailing miami fl enthusiasts who demand perfection.</p>
+</div>
+<div class="hidden md:block h-px flex-1 bg-outline-variant mx-12 mb-4"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Service 1 -->
+<div class="group machined-border bg-surface-container-low p-1 hover:border-primary-container/50 transition-all fast-fade-in">
+<div class="aspect-[4/3] relative overflow-hidden">
+<div class="absolute inset-0 bg-center bg-cover group-hover:scale-105 transition-transform duration-500" data-alt="Meticulous exterior car wash and detailing showing water beading off a deep blue ceramic coated hood" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBFXUP9TLr1OqHGgpylashkvyFVocLwNYoC79jqx_XJaBc7HSv6u4uWHa5yvZsXs67vgbAYH20RwnaExoABU1qtOZTovedXjz_gMyBciaVKHPHL-QV6_IVzMcKAk8XEJzcKIUi3HkUqELNIWl3AP2E-VCCRLTJkbwVo3JVGDQWlscyY9NT4tyMwpcZJTdxgtuP5ORtAqSvXSN5z5GJrOOdNL5eW489ye6UUS2shk8C8nXDVVAj5SQNNVGGwqUHSq3bHixqF4WKCKrY')"></div>
+<div class="absolute top-4 left-4 bg-primary-container text-on-primary text-[10px] font-black px-2 py-1">MOST POPULAR</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-2">Exterior Restoration</h3>
+<p class="text-sm text-on-surface-variant mb-6 h-12">Foam cannon bath, clay bar decontamination, and high-gloss ceramic wax seal.</p>
+<div class="flex items-center justify-between">
+<span class="text-primary-container font-bold">$149+</span>
+<span class="material-symbols-outlined text-primary-container" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Service 2 -->
+<div class="group machined-border bg-surface-container-low p-1 hover:border-primary-container/50 transition-all fast-fade-in">
+<div class="aspect-[4/3] relative overflow-hidden">
+<div class="absolute inset-0 bg-center bg-cover group-hover:scale-105 transition-transform duration-500" data-alt="High-end leather interior car detailing with professional steam cleaning and conditioning of dashboard and steering wheel" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCuLxJvvC7-lSQJ7KeoMuYbuhofd5A4N49S0cgllIt9pV4k-t9K-J81WA6j7NEw-lh6QxTSqy5pNeLv0wcDrkwUwcyMkmPtbSpGkK2daQR6TEZ2UuZUcPwnoejF8HclXwJzPLTPruI2dJwsbMZWVujrISpAh5ezY8Ajl8gfz3ROy2FxTPrjgx5ojHg2sXmxpAB3WudiN6EBBnd8CoxcDTLz6KpJwyhX9ael84MX_05iANCyrODhc9r3smd5922fsDN2wPQjzBucWNo')"></div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-2">Interior Car Detailing</h3>
+<p class="text-sm text-on-surface-variant mb-6 h-12">Steam sterilization, deep extraction, and premium leather hydration for a new-car feel.</p>
+<div class="flex items-center justify-between">
+<span class="text-primary-container font-bold">$129+</span>
+<span class="material-symbols-outlined text-primary-container" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Service 3 -->
+<div class="group machined-border bg-surface-container-low p-1 hover:border-primary-container/50 transition-all fast-fade-in">
+<div class="aspect-[4/3] relative overflow-hidden">
+<div class="absolute inset-0 bg-center bg-cover group-hover:scale-105 transition-transform duration-500" data-alt="A showroom floor with a white exotic car under bright lights showing the results of professional mobile detailing" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCu49TbrV4EskusIGSaYydVDK53Cj3oVjXnld0fIPR-Z7n6iLQ7yVXKPdFWAchuRJZmPUV1ZGRkjiMQEph5JPU8WsPHppsT78OmXh_l9O6y9QOqRnAYS2M0x3UVcxnsKpd8_-uAA2fQqfeehZ0uqfiSj96r5tIMLIIfpzO88Z3QVfgqerVWfTkzvu9obcN4_aMYi3TnroA2lDs-Ev7QmN6y5OI5b-tlKqZtXHvVu1UbFQHkolRgju0dOWVTFIXBYOuhBHPktnfmno8')"></div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold mb-2">Full Showroom Package</h3>
+<p class="text-sm text-on-surface-variant mb-6 h-12">The ultimate mobile detailing miami experience. Total rejuvenation inside and out.</p>
+<div class="flex items-center justify-between">
+<span class="text-primary-container font-bold">$299+</span>
+<span class="material-symbols-outlined text-primary-container" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Convenience Section -->
+<section class="py-xl bg-surface-container-lowest border-y border-outline-variant overflow-hidden">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 fast-fade-in">
+<h2 class="text-4xl font-bold mb-8">We Bring the Detail Shop to Your Driveway</h2>
+<div class="space-y-8">
+<div class="flex gap-4">
+<div class="size-12 bg-surface-container-high machined-border flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-container" data-icon="schedule">schedule</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-2">SCHEDULE ONLINE</h4>
+<p class="text-sm text-on-surface-variant">Book your slot in 60 seconds through our performance-optimized mobile detailing app.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-12 bg-surface-container-high machined-border flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-container" data-icon="location_on">location_on</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-2">WE ARRIVE FULLY EQUIPPED</h4>
+<p class="text-sm text-on-surface-variant">Our mobile units carry their own filtered water, power, and high-velocity detailing tools.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="size-12 bg-surface-container-high machined-border flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-container" data-icon="verified">verified</span>
+</div>
+<div>
+<h4 class="font-bold text-white mb-2">DRIVE PERFECTION</h4>
+<p class="text-sm text-on-surface-variant">Inspect your vehicle to ensure it meets our 50-point precision detailing checklist.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 relative">
+<div class="chamfer-clip border-2 border-primary-container p-2">
+<div class="aspect-square bg-center bg-cover" data-alt="Professional mobile car detailing van equipped with high-tech cleaning gear parked in a luxury Miami residential driveway" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuArVDBjOjmgDFNPE3QtRIPwzyFZ3iCNb3Og5hcqba-VUIKajY_Smjrrs82YccjxLyZJyQeg6_F39UX3kYBVvadACkZceH6R6_HpysjyDKAXHBaWjbjumqxcN0GF5kL6C_klVUL_o8FDzI3GI2srUuZGCAdBIKrdCT39HfIt6rD4APwij-aR2oqnYLyU5KBaur0ViIZXzBN6F5ZO5hN1gFfaxYjjq5RxBaZIEU-LXdlDb0hMbR-eYXB3YGZh8vTYqzrSG_8mr_NGwS8')"></div>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-surface-container-high p-6 machined-border max-w-[240px]">
+<p class="text-primary-container font-black text-2xl mb-1">PRO GRADE</p>
+<p class="text-xs text-on-surface-variant">Autonomous water and power supply in every mobile unit.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-xl" id="pricing">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-bold mb-4">Simple Pricing for Every Level of Detail</h2>
+<p class="text-on-surface-variant">Transparent rates for elite car detailing miami fl quality.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-0 machined-border">
+<!-- Standard -->
+<div class="p-10 border-r border-outline-variant bg-surface-container/30 fast-fade-in">
+<div class="mb-8">
+<span class="text-[10px] font-bold text-outline uppercase tracking-[0.2em]">Maintenance</span>
+<h3 class="text-3xl font-bold mt-2">Essential</h3>
+</div>
+<div class="text-4xl font-bold text-white mb-8">$149 <span class="text-sm font-normal text-outline">/ detail</span></div>
+<ul class="space-y-4 mb-10 text-sm text-on-surface-variant">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> pH Neutral Foam Wash</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Interior Vacuum &amp; Dust</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Tire &amp; Rim Degrease</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Window Streak-Free Finish</li>
+</ul>
+<button class="w-full py-4 border border-outline-variant text-white font-bold hover:bg-surface-container transition-colors">SELECT ESSENTIAL</button>
+</div>
+<!-- Pro -->
+<div class="p-10 border-r border-outline-variant bg-surface-container-high relative fast-fade-in" style="animation-delay: 0.1s;">
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary-container shadow-[0_0_10px_rgba(0,221,233,0.5)]"></div>
+<div class="mb-8">
+<span class="text-[10px] font-bold text-primary-container uppercase tracking-[0.2em]">High Velocity</span>
+<h3 class="text-3xl font-bold mt-2">Executive</h3>
+</div>
+<div class="text-4xl font-bold text-white mb-8">$249 <span class="text-sm font-normal text-outline">/ detail</span></div>
+<ul class="space-y-4 mb-10 text-sm text-on-surface-variant">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Everything in Essential</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Clay Bar Decon</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Leather Conditioning</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Engine Bay Detail</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> High-Gloss Paint Sealant</li>
+</ul>
+<button class="w-full py-4 bg-primary-container text-on-primary font-bold cyan-glow">BOOK EXECUTIVE</button>
+</div>
+<!-- Elite -->
+<div class="p-10 bg-surface-container/30 fast-fade-in" style="animation-delay: 0.2s;">
+<div class="mb-8">
+<span class="text-[10px] font-bold text-outline uppercase tracking-[0.2em]">Showroom</span>
+<h3 class="text-3xl font-bold mt-2">Signature</h3>
+</div>
+<div class="text-4xl font-bold text-white mb-8">$399 <span class="text-sm font-normal text-outline">/ detail</span></div>
+<ul class="space-y-4 mb-10 text-sm text-on-surface-variant">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Everything in Executive</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Stage 1 Paint Correction</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Full Interior Extraction</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container text-lg" data-icon="check_circle">check_circle</span> Ceramic Coating Booster</li>
+</ul>
+<button class="w-full py-4 border border-outline-variant text-white font-bold hover:bg-surface-container transition-colors">SELECT SIGNATURE</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Subscription Section -->
+<section class="py-xl bg-[#080808]">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="machined-border p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 bg-gradient-to-br from-surface-container-low to-black">
+<div class="flex-1 fast-fade-in">
+<h2 class="text-4xl font-bold mb-6">Keep Your Car Clean Year-Round with Our Monthly Plan</h2>
+<p class="text-on-surface-variant mb-8 text-lg">Join the Revved Inner Circle for monthly maintenance details at a 30% discount. Perfect for keeping your car detailing miami fl investment looking brand new every single day.</p>
+<div class="flex flex-wrap gap-4 mb-8">
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary-container text-sm" data-icon="verified">verified</span>
+<span class="text-xs font-bold uppercase tracking-widest">Priority Scheduling</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 bg-surface-container rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary-container text-sm" data-icon="verified">verified</span>
+<span class="text-xs font-bold uppercase tracking-widest">Exclusive Rates</span>
+</div>
+</div>
+<button class="text-primary-container font-bold flex items-center gap-2 hover:translate-x-2 transition-transform">
+                        EXPLORE MEMBERSHIPS <span class="material-symbols-outlined" data-icon="trending_flat">trending_flat</span>
+</button>
+</div>
+<div class="w-full md:w-[400px] aspect-[4/5] bg-surface-container relative fast-fade-in" style="animation-delay: 0.1s;">
+<div class="absolute inset-0 bg-center bg-cover" data-alt="Multiple polished luxury cars lined up in a high-end garage, representing a collection of cars managed by a monthly detailing plan" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBKN1bk1xsU_Suh7n-mY1_wbuPzgTi-0A-YY9wNt4QyQHx9uPd4qt0KegqF9ypSbUJd7RlxLubLQ_mJQmlFoGXTaf-Vei9cj76aLGfIg5hKXDXnVJiqb2-VkRBEgY6wZD8tl-vvBwMHTWTukV09dpgtVGGrvuI52CQCcaC6g10WK_Fsroa2QEKYKgB2gzdQ0T-i20zxXdsqJgcGF5NIfrgOdX8OyBh9UQgtgRbUB3BPaPf3dUHkWldJGI2FXu-t-WTPMCqt0u78sq0')"></div>
+<div class="absolute inset-0 border border-primary-container/20"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Why Choose Us -->
+<section class="py-xl">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="text-center mb-16">
+<h2 class="text-4xl font-bold mb-4">Why Miami Drivers Choose Refreshed By Revved</h2>
+<p class="text-on-surface-variant">The standard for elite mobile detailing miami.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="text-center p-6 fast-fade-in">
+<span class="material-symbols-outlined text-5xl text-primary-container mb-4" data-icon="precision_manufacturing">precision_manufacturing</span>
+<h4 class="font-bold mb-2">PRECISION TOOLS</h4>
+<p class="text-sm text-outline">Rupes and Flex polishers paired with high-end chemical formulations.</p>
+</div>
+<div class="text-center p-6 fast-fade-in" style="animation-delay: 0.1s;">
+<span class="material-symbols-outlined text-5xl text-primary-container mb-4" data-icon="speed">speed</span>
+<h4 class="font-bold mb-2">RAPID DEPLOY</h4>
+<p class="text-sm text-outline">Our fleet of mobile car detailing Miami units is always ready for same-day service.</p>
+</div>
+<div class="text-center p-6 fast-fade-in" style="animation-delay: 0.2s;">
+<span class="material-symbols-outlined text-5xl text-primary-container mb-4" data-icon="shield">shield</span>
+<h4 class="font-bold mb-2">FULLY INSURED</h4>
+<p class="text-sm text-outline">Peace of mind for your exotics, luxury sedans, and daily drivers.</p>
+</div>
+<div class="text-center p-6 fast-fade-in" style="animation-delay: 0.3s;">
+<span class="material-symbols-outlined text-5xl text-primary-container mb-4" data-icon="eco">eco</span>
+<h4 class="font-bold mb-2">ECO-FRIENDLY</h4>
+<p class="text-sm text-outline">Water-saving technologies that protect both your car and the Miami coastline.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Map & Locations Section -->
+<section class="py-xl bg-surface-container-lowest" id="locations">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+<div class="lg:col-span-1 fast-fade-in">
+<h2 class="text-4xl font-bold mb-8">Mobile Detailing Near You in Miami</h2>
+<p class="text-on-surface-variant mb-10">We serve the entire Greater Miami area, bringing mobile car detailing miami directly to your office, home, or marina.</p>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary-container" data-icon="map">map</span>
+<span class="text-sm font-bold uppercase">Coral Gables &amp; Coconut Grove</span>
+</div>
+<div class="flex items-center gap-4 border-t border-outline-variant/30 pt-6">
+<span class="material-symbols-outlined text-primary-container" data-icon="map">map</span>
+<span class="text-sm font-bold uppercase">Miami Beach &amp; Brickell</span>
+</div>
+<div class="flex items-center gap-4 border-t border-outline-variant/30 pt-6">
+<span class="material-symbols-outlined text-primary-container" data-icon="map">map</span>
+<span class="text-sm font-bold uppercase">Doral &amp; Pinecrest</span>
+</div>
+<div class="flex items-center gap-4 border-t border-outline-variant/30 pt-6">
+<span class="material-symbols-outlined text-primary-container" data-icon="map">map</span>
+<span class="text-sm font-bold uppercase">Aventura &amp; Sunny Isles</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2 h-[500px] bg-surface-container machined-border overflow-hidden relative fast-fade-in">
+<!-- Placeholder for styled Map Section -->
+<div class="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
+<iframe allowfullscreen="" data-location="Miami, FL" height="100%" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114964.88210350524!2d-80.2994982186591!3d25.782390733560662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9b0a58e95663f%3A0xe740f9596e191942!2sMiami%2C%20FL!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" style="border:0; filter: grayscale(1) invert(0.9) contrast(1.2);" width="100%">
+</iframe>
+</div>
+<div class="absolute top-4 right-4 bg-surface px-4 py-2 border border-primary-container/50">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-red-500 animate-ping"></span>
+<span class="text-[10px] font-bold text-white uppercase tracking-widest">5 Units Active</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-black py-16 border-t border-outline-variant">
+<div class="max-w-[1280px] mx-auto px-margin">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div class="md:col-span-2">
+<div class="flex items-center gap-3 mb-6">
+<div class="size-6 text-primary-container">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-lg font-bold tracking-tighter headline">REVVED DETAILING</span>
+</div>
+<p class="text-on-surface-variant max-w-sm text-sm mb-6 font-body">
+                        The elite standard in Miami mobile car detailing. Providing high-performance interior car detailing and ceramic restoration since 2018.
+                    </p>
+<div class="flex gap-4">
+<a class="size-10 machined-border flex items-center justify-center hover:bg-primary-container hover:text-on-primary transition-all" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="public">public</span>
+</a>
+<a class="size-10 machined-border flex items-center justify-center hover:bg-primary-container hover:text-on-primary transition-all" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="photo_camera">photo_camera</span>
+</a>
+</div>
+</div>
+<div>
+<h5 class="text-sm font-bold uppercase tracking-widest text-white mb-6">SERVICES</h5>
+<ul class="space-y-4 text-xs text-on-surface-variant font-bold uppercase tracking-wider">
+<li><a class="hover:text-primary-container" href="#">Exterior Detail</a></li>
+<li><a class="hover:text-primary-container" href="#">Interior Rejuvenation</a></li>
+<li><a class="hover:text-primary-container" href="#">Ceramic Coating</a></li>
+<li><a class="hover:text-primary-container" href="#">Paint Correction</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-sm font-bold uppercase tracking-widest text-white mb-6">CONTACT</h5>
+<ul class="space-y-4 text-xs text-on-surface-variant font-bold uppercase tracking-wider">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm" data-icon="call">call</span> (305) 555-REVVED</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm" data-icon="mail">mail</span> GO@REVVED.AUTO</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-container text-sm" data-icon="location_on">location_on</span> MIAMI, FL</li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-outline font-bold uppercase tracking-[0.2em]">
+<div>© 2024 REVVED DETAILING MIAMI. ALL RIGHTS RESERVED.</div>
+<div class="flex gap-8">
+<a class="hover:text-primary-container" href="#">PRIVACY POLICY</a>
+<a class="hover:text-primary-container" href="#">TERMS OF SERVICE</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

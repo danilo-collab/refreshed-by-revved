@@ -1,0 +1,9 @@
+export { HeroSection } from "./hero-section";
+export { StatsBar } from "./stats-bar";
+export { ServicesSection } from "./services-section";
+export { ConvenienceSection } from "./convenience-section";
+export { PricingSection } from "./pricing-section";
+export { SubscriptionSection } from "./subscription-section";
+export { WhyChooseUsSection } from "./why-choose-us-section";
+export { LocationsSection } from "./locations-section";
+export { WhatsAppButton } from "./whatsapp-button";
