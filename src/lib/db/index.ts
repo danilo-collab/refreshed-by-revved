@@ -18,7 +18,7 @@ export function getDb() {
 // Lazy getter for backwards compatibility
 export const db = new Proxy({} as NeonHttpDatabase<typeof schema>, {
   get(_, prop) {
-    return (getDb() as Record<string | symbol, unknown>)[prop];
+    return (getDb() as unknown as Record<string | symbol, unknown>)[prop];
   },
 });
 
