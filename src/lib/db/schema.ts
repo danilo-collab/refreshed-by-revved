@@ -29,6 +29,13 @@ export const paymentStatusEnum = pgEnum("payment_status", [
 
 export const userRoleEnum = pgEnum("user_role", ["admin", "user"]);
 
+export const leadStatusEnum = pgEnum("lead_status", [
+  "new",
+  "contacted",
+  "booked",
+  "rejected",
+]);
+
 // Users table (for admin auth)
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -104,9 +111,13 @@ export const leads = pgTable("leads", {
   email: text("email").notNull(),
   phone: text("phone"),
   message: text("message").notNull(),
+  photos: jsonb("photos").$type<string[]>().default([]),
   source: text("source").default("contact_form"),
+  status: leadStatusEnum("status").default("new").notNull(),
+  notes: text("notes"),
   isRead: boolean("is_read").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // Availability / blocked time slots

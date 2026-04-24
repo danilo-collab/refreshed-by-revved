@@ -10,6 +10,7 @@ import {
   SubscriptionSection,
   WhyChooseUsSection,
   LocationsSection,
+  ContactSection,
   WhatsAppButton,
 } from "@/components/home";
 
@@ -27,6 +28,7 @@ export default function Home() {
         <SubscriptionSection />
         <WhyChooseUsSection />
         <LocationsSection />
+        <ContactSection />
       </main>
       <Footer />
       <WhatsAppButton />

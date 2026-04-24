@@ -12,6 +12,7 @@ const leadSchema = z.object({
   email: z.string().email(),
   phone: z.string().optional(),
   message: z.string().min(1),
+  photos: z.array(z.string()).max(5).optional(), // Max 5 photos as base64 data URLs
   source: z.string().optional(),
 });
 
@@ -82,6 +83,7 @@ export async function POST(request: NextRequest) {
         email: data.email,
         phone: data.phone,
         message: data.message,
+        photos: data.photos || [],
         source: data.source || "contact_form",
       })
       .returning();

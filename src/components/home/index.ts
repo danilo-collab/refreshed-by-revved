@@ -6,4 +6,5 @@ export { PricingSection } from "./pricing-section";
 export { SubscriptionSection } from "./subscription-section";
 export { WhyChooseUsSection } from "./why-choose-us-section";
 export { LocationsSection } from "./locations-section";
+export { ContactSection } from "./contact-section";
 export { WhatsAppButton } from "./whatsapp-button";
