@@ -126,6 +126,22 @@ export const settings = pgTable("settings", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Dashboard stats table (updated via triggers)
+export const dashboardStats = pgTable("dashboard_stats", {
+  id: text("id").primaryKey().default("main"), // Single row
+  bookingsToday: integer("bookings_today").default(0).notNull(),
+  bookingsTodayDate: timestamp("bookings_today_date").defaultNow().notNull(),
+  bookingsTotal: integer("bookings_total").default(0).notNull(),
+  leadsThisWeek: integer("leads_this_week").default(0).notNull(),
+  leadsWeekStart: timestamp("leads_week_start").defaultNow().notNull(),
+  leadsTotal: integer("leads_total").default(0).notNull(),
+  revenueMtd: decimal("revenue_mtd", { precision: 10, scale: 2 }).default("0").notNull(),
+  revenueMonth: integer("revenue_month").default(1).notNull(),
+  revenueYear: integer("revenue_year").default(2024).notNull(),
+  revenueTotal: decimal("revenue_total", { precision: 10, scale: 2 }).default("0").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // Relations
 export const productsRelations = relations(products, ({ many }) => ({
   bookings: many(bookings),
@@ -159,3 +175,5 @@ export type NewBlockedSlot = typeof blockedSlots.$inferInsert;
 
 export type Setting = typeof settings.$inferSelect;
 export type NewSetting = typeof settings.$inferInsert;
+
+export type DashboardStats = typeof dashboardStats.$inferSelect;

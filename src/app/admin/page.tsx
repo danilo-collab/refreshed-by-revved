@@ -1,6 +1,18 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Calendar, Package, Users, DollarSign } from "lucide-react";
+import { db } from "@/lib/db";
+import { dashboardStats, products } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+
+function getWeekStart(date: Date): Date {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  d.setDate(diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
 
 export default async function AdminDashboard() {
   const session = await auth();
@@ -9,12 +21,49 @@ export default async function AdminDashboard() {
     redirect("/admin/login");
   }
 
-  // Mock stats - would come from API
-  const stats = [
-    { label: "Today's Bookings", value: "3", icon: Calendar, change: "+2 from yesterday" },
-    { label: "Active Services", value: "4", icon: Package, change: "3 packages, 1 subscription" },
-    { label: "New Leads", value: "7", icon: Users, change: "This week" },
-    { label: "Revenue (MTD)", value: "$4,850", icon: DollarSign, change: "+12% vs last month" },
+  // Fetch dashboard stats from pre-computed table
+  const [stats, activeProducts] = await Promise.all([
+    db.select().from(dashboardStats).where(eq(dashboardStats.id, "main")).then(r => r[0]),
+    db.select().from(products).where(eq(products.isActive, true)),
+  ]);
+
+  // Check if date counters need reset (for display purposes)
+  const today = new Date();
+  const isToday = stats?.bookingsTodayDate &&
+    new Date(stats.bookingsTodayDate).toDateString() === today.toDateString();
+  const isThisWeek = stats?.leadsWeekStart &&
+    new Date(stats.leadsWeekStart).getTime() === getWeekStart(today).getTime();
+  const isThisMonth = stats?.revenueMonth === (today.getMonth() + 1) &&
+    stats?.revenueYear === today.getFullYear();
+
+  const subscriptionCount = activeProducts.filter(p => p.isSubscription).length;
+  const packageCount = activeProducts.length - subscriptionCount;
+
+  const displayStats = [
+    {
+      label: "Today's Bookings",
+      value: isToday ? String(stats?.bookingsToday || 0) : "0",
+      icon: Calendar,
+      change: `${stats?.bookingsTotal || 0} total`
+    },
+    {
+      label: "Active Services",
+      value: String(activeProducts.length),
+      icon: Package,
+      change: `${packageCount} packages, ${subscriptionCount} subscription`
+    },
+    {
+      label: "New Leads",
+      value: isThisWeek ? String(stats?.leadsThisWeek || 0) : "0",
+      icon: Users,
+      change: `${stats?.leadsTotal || 0} total`
+    },
+    {
+      label: "Revenue (MTD)",
+      value: `$${isThisMonth ? Number(stats?.revenueMtd || 0).toLocaleString() : "0"}`,
+      icon: DollarSign,
+      change: `$${Number(stats?.revenueTotal || 0).toLocaleString()} total`
+    },
   ];
 
   return (
@@ -28,7 +77,7 @@ export default async function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat) => (
+        {displayStats.map((stat) => (
           <div key={stat.label} className="machined-border bg-surface-container-low p-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-on-surface-variant text-sm uppercase tracking-wider">
