@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { bookings } from "@/lib/db/schema";
+import { bookings, settings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 // Payment provider types
@@ -78,8 +78,41 @@ export async function GET(
       );
     }
 
-    // Determine payment provider from env
-    const provider = (process.env.PAYMENT_PROVIDER || "stripe") as PaymentProvider;
+    // Check if payments are enabled
+    const [paymentsEnabledSetting] = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.key, "paymentsEnabled"))
+      .limit(1);
+
+    const paymentsEnabled = paymentsEnabledSetting?.value === true;
+
+    // If payments disabled, mark as confirmed and redirect to success
+    if (!paymentsEnabled) {
+      await db
+        .update(bookings)
+        .set({
+          paymentStatus: "paid",
+          status: "confirmed",
+          updatedAt: new Date(),
+        })
+        .where(eq(bookings.id, id));
+
+      return NextResponse.redirect(
+        new URL("/booking/success", process.env.NEXTAUTH_URL!)
+      );
+    }
+
+    // Determine payment provider from settings or env
+    const [providerSetting] = await db
+      .select()
+      .from(settings)
+      .where(eq(settings.key, "paymentProvider"))
+      .limit(1);
+
+    const provider = ((providerSetting?.value as string) ||
+      process.env.PAYMENT_PROVIDER ||
+      "stripe") as PaymentProvider;
 
     let checkoutUrl: string | null = null;
 
