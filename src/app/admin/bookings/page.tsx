@@ -5,6 +5,7 @@ import { Calendar, Clock, MapPin, User, Phone, Mail, CalendarX, Store } from "lu
 import { db } from "@/lib/db";
 import { bookings } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
+import { BookingActions } from "@/components/admin/booking-actions";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/20 text-yellow-500",
@@ -69,17 +70,20 @@ export default async function AdminBookingsPage() {
                   </span>
                 </div>
               </div>
-              <div className="text-right">
-                <span
-                  className={`inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider ${
-                    statusColors[booking.status] || statusColors.pending
-                  }`}
-                >
-                  {booking.status.replace("_", " ")}
-                </span>
-                <p className="text-2xl font-bold text-primary-container mt-2">
-                  ${parseFloat(booking.totalPrice).toFixed(2)}
-                </p>
+              <div className="flex items-start gap-4">
+                <div className="text-right">
+                  <span
+                    className={`inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+                      statusColors[booking.status] || statusColors.pending
+                    }`}
+                  >
+                    {booking.status.replace("_", " ")}
+                  </span>
+                  <p className="text-2xl font-bold text-primary-container mt-2">
+                    ${parseFloat(booking.totalPrice).toFixed(2)}
+                  </p>
+                </div>
+                <BookingActions bookingId={booking.id} status={booking.status} />
               </div>
             </div>
 
