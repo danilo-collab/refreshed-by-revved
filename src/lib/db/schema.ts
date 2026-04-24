@@ -36,6 +36,8 @@ export const leadStatusEnum = pgEnum("lead_status", [
   "rejected",
 ]);
 
+export const locationTypeEnum = pgEnum("location_type", ["store", "customer"]);
+
 // Users table (for admin auth)
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -88,6 +90,7 @@ export const bookings = pgTable("bookings", {
   customerName: text("customer_name").notNull(),
   customerEmail: text("customer_email").notNull(),
   customerPhone: text("customer_phone").notNull(),
+  locationType: locationTypeEnum("location_type").default("customer").notNull(),
   address: text("address").notNull(),
   addressNotes: text("address_notes"),
   scheduledDate: timestamp("scheduled_date").notNull(),

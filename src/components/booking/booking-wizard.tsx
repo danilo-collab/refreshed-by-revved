@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ServiceSelection } from "./service-selection";
 import { AddonSelection } from "./addon-selection";
-import { LocationInput } from "./location-input";
+import { LocationInput, type LocationType } from "./location-input";
 import { DateTimeSelection } from "./datetime-selection";
 import { BookingSummary } from "./booking-summary";
 import { CustomerInfo, isValidEmail, isValidUSPhone } from "./customer-info";
@@ -27,6 +27,7 @@ export interface Addon {
 export interface BookingData {
   service: Service | null;
   addons: Addon[];
+  locationType: LocationType;
   address: string;
   addressNotes: string;
   date: Date | null;
@@ -54,6 +55,7 @@ export function BookingWizard() {
   const [bookingData, setBookingData] = useState<BookingData>({
     service: null,
     addons: [],
+    locationType: "customer",
     address: "",
     addressNotes: "",
     date: null,
@@ -171,6 +173,7 @@ export function BookingWizard() {
           customerName: bookingData.customerName,
           customerEmail: bookingData.customerEmail,
           customerPhone: bookingData.customerPhone,
+          locationType: bookingData.locationType,
           address: bookingData.address,
           addressNotes: bookingData.addressNotes || undefined,
           scheduledDate: scheduledDate.toISOString(),
@@ -308,8 +311,10 @@ export function BookingWizard() {
           )}
           {currentStep === 3 && (
             <LocationInput
+              locationType={bookingData.locationType}
               address={bookingData.address}
               addressNotes={bookingData.addressNotes}
+              onLocationTypeChange={(locationType) => updateBookingData({ locationType })}
               onAddressChange={(address) => updateBookingData({ address })}
               onNotesChange={(addressNotes) => updateBookingData({ addressNotes })}
             />
@@ -321,6 +326,7 @@ export function BookingWizard() {
               onDateChange={(date) => updateBookingData({ date })}
               onTimeChange={(time) => updateBookingData({ time })}
               serviceDuration={totalDuration}
+              locationType={bookingData.locationType}
             />
           )}
           {currentStep === 5 && (

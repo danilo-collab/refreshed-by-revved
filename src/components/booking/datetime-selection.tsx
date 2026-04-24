@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { format, addDays, isSameDay, startOfToday } from "date-fns";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Loader2 } from "lucide-react";
+import type { LocationType } from "./location-input";
 
 interface DateTimeSelectionProps {
   selectedDate: Date | null;
@@ -11,6 +12,7 @@ interface DateTimeSelectionProps {
   onDateChange: (date: Date) => void;
   onTimeChange: (time: string) => void;
   serviceDuration: number;
+  locationType: LocationType;
 }
 
 const TIME_SLOTS = [
@@ -32,14 +34,54 @@ export function DateTimeSelection({
   onDateChange,
   onTimeChange,
   serviceDuration,
+  locationType,
 }: DateTimeSelectionProps) {
   const [weekOffset, setWeekOffset] = useState(0);
+  const [availability, setAvailability] = useState<Record<string, boolean>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const today = startOfToday();
 
   // Generate 7 days starting from today + weekOffset
   const days = Array.from({ length: 7 }, (_, i) =>
     addDays(today, i + weekOffset * 7)
   );
+
+  // Fetch availability when date or locationType changes
+  const fetchAvailability = useCallback(async () => {
+    if (!selectedDate) return;
+
+    setIsLoading(true);
+    try {
+      const dateStr = format(selectedDate, "yyyy-MM-dd");
+      const res = await fetch(
+        `/api/bookings/availability?date=${dateStr}&duration=${serviceDuration}&locationType=${locationType}`
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        setAvailability(data.availability);
+      }
+    } catch (error) {
+      console.error("Failed to fetch availability:", error);
+      // On error, show all slots as available
+      const allAvailable: Record<string, boolean> = {};
+      TIME_SLOTS.forEach((slot) => (allAvailable[slot] = true));
+      setAvailability(allAvailable);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [selectedDate, serviceDuration, locationType]);
+
+  useEffect(() => {
+    fetchAvailability();
+  }, [fetchAvailability]);
+
+  // Clear selected time if it becomes unavailable
+  useEffect(() => {
+    if (selectedTime && availability[selectedTime] === false) {
+      onTimeChange("");
+    }
+  }, [availability, selectedTime, onTimeChange]);
 
   return (
     <div>
@@ -110,18 +152,18 @@ export function DateTimeSelection({
             <span className="font-bold">
               Available Times for {format(selectedDate, "EEEE, MMMM d")}
             </span>
+            {isLoading && <Loader2 className="size-4 animate-spin text-outline" />}
           </div>
 
           <div className="grid grid-cols-5 gap-2">
             {TIME_SLOTS.map((time) => {
               const isSelected = selectedTime === time;
-              // TODO: Check actual availability from API
-              const isAvailable = true;
+              const isAvailable = availability[time] !== false;
               return (
                 <button
                   key={time}
-                  onClick={() => isAvailable && onTimeChange(time)}
-                  disabled={!isAvailable}
+                  onClick={() => isAvailable && !isLoading && onTimeChange(time)}
+                  disabled={!isAvailable || isLoading}
                   className={cn(
                     "p-3 text-center machined-border transition-all font-bold",
                     !isAvailable
@@ -136,6 +178,12 @@ export function DateTimeSelection({
               );
             })}
           </div>
+
+          {Object.values(availability).every((v) => v === false) && !isLoading && (
+            <p className="text-center text-on-surface-variant mt-4 normal-case not-italic">
+              No available slots for this date. Please try another day.
+            </p>
+          )}
         </div>
       )}
     </div>

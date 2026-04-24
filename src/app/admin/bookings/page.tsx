@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
-import { Calendar, Clock, MapPin, User, Phone, Mail, CalendarX } from "lucide-react";
+import { Calendar, Clock, MapPin, User, Phone, Mail, CalendarX, Store } from "lucide-react";
 import { db } from "@/lib/db";
 import { bookings } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
@@ -98,10 +98,26 @@ export default async function AdminBookingsPage() {
                   <span>{booking.customerPhone}</span>
                 </div>
               </div>
-              <div>
-                <div className="flex items-start gap-2 text-sm">
-                  <MapPin className="size-4 text-primary-container shrink-0 mt-0.5" />
-                  <span>{booking.address}</span>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm">
+                  {booking.locationType === "store" ? (
+                    <>
+                      <Store className="size-4 text-primary-container" />
+                      <span className="px-2 py-0.5 text-xs font-bold uppercase bg-primary-container/20 text-primary-container">
+                        At Store
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <MapPin className="size-4 text-primary-container" />
+                      <span className="px-2 py-0.5 text-xs font-bold uppercase bg-tertiary-container/20 text-tertiary-container">
+                        On-Site
+                      </span>
+                    </>
+                  )}
+                </div>
+                <div className="flex items-start gap-2 text-sm text-on-surface-variant">
+                  <span className="ml-6">{booking.address}</span>
                 </div>
               </div>
             </div>
