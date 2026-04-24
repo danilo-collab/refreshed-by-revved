@@ -60,6 +60,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const baseUrl = request.nextUrl.origin;
 
     // Fetch booking
     const [booking] = await db
@@ -73,9 +74,7 @@ export async function GET(
     }
 
     if (booking.paymentStatus === "paid") {
-      return NextResponse.redirect(
-        new URL("/booking/success", process.env.NEXTAUTH_URL!)
-      );
+      return NextResponse.redirect(new URL("/booking/success", baseUrl));
     }
 
     // Check if payments are enabled
@@ -98,9 +97,7 @@ export async function GET(
         })
         .where(eq(bookings.id, id));
 
-      return NextResponse.redirect(
-        new URL("/booking/success", process.env.NEXTAUTH_URL!)
-      );
+      return NextResponse.redirect(new URL("/booking/success", baseUrl));
     }
 
     // Determine payment provider from settings or env

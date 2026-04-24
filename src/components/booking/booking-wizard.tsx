@@ -6,7 +6,7 @@ import { AddonSelection } from "./addon-selection";
 import { LocationInput } from "./location-input";
 import { DateTimeSelection } from "./datetime-selection";
 import { BookingSummary } from "./booking-summary";
-import { CustomerInfo } from "./customer-info";
+import { CustomerInfo, isValidEmail, isValidUSPhone } from "./customer-info";
 import { cn } from "@/lib/utils";
 
 export interface Service {
@@ -128,8 +128,8 @@ export function BookingWizard() {
       case 5:
         return (
           bookingData.customerName.trim() !== "" &&
-          bookingData.customerEmail.trim() !== "" &&
-          bookingData.customerPhone.trim() !== ""
+          isValidEmail(bookingData.customerEmail) &&
+          isValidUSPhone(bookingData.customerPhone)
         );
       default:
         return false;
