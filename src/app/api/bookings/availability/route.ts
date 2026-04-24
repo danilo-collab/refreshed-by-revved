@@ -5,17 +5,18 @@ import { and, gte, lt, ne } from "drizzle-orm";
 
 type LocationType = "store" | "customer";
 
+// 30-minute intervals to support travel gap scheduling
 const TIME_SLOTS = [
-  "08:00",
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
+  "08:00", "08:30",
+  "09:00", "09:30",
+  "10:00", "10:30",
+  "11:00", "11:30",
+  "12:00", "12:30",
+  "13:00", "13:30",
+  "14:00", "14:30",
+  "15:00", "15:30",
+  "16:00", "16:30",
+  "17:00", "17:30",
 ];
 
 const TRAVEL_GAP_MINUTES = 30;
@@ -97,7 +98,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const date = new Date(dateStr);
+    // Parse date as local midnight (not UTC)
+    // "2026-04-25" + "T00:00:00" -> midnight LOCAL time
+    const date = new Date(dateStr + "T00:00:00");
     const duration = parseInt(durationStr, 10);
 
     if (isNaN(date.getTime()) || isNaN(duration)) {
@@ -107,7 +110,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get start/end of day
+    // Get start/end of day in LOCAL time
     const dayStart = new Date(date);
     dayStart.setHours(0, 0, 0, 0);
     const dayEnd = new Date(date);
@@ -159,7 +162,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ availability, date: dateStr, duration, locationType });
+    // Return slots array for frontend to render dynamically
+    const slots = TIME_SLOTS.filter((slot) => {
+      const [hours] = slot.split(":").map(Number);
+      // Only include slots that could fit within business hours
+      return hours < 18;
+    });
+
+    return NextResponse.json({ slots, availability, date: dateStr, duration, locationType });
   } catch (error) {
     console.error("Availability check error:", error);
     return NextResponse.json(

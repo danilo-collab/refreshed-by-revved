@@ -9,6 +9,18 @@ import { BookingSummary } from "./booking-summary";
 import { CustomerInfo, isValidEmail, isValidUSPhone } from "./customer-info";
 import { cn } from "@/lib/utils";
 
+// Format date as local ISO string without timezone conversion
+// This ensures 8 AM selected = 8 AM stored (not converted to UTC)
+function formatLocalDateTime(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
 export interface Service {
   id: string;
   name: string;
@@ -52,6 +64,7 @@ export function BookingWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(true);
   const [bookingData, setBookingData] = useState<BookingData>({
     service: null,
     addons: [],
@@ -65,13 +78,18 @@ export function BookingWizard() {
     customerPhone: "",
   });
 
-  // Fetch products and addons from API
+  // Fetch products, addons, and settings from API
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchData() {
       try {
-        const response = await fetch("/api/products");
-        if (!response.ok) throw new Error("Failed to fetch products");
-        const data = await response.json();
+        // Fetch products and settings in parallel
+        const [productsRes, settingsRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/settings"),
+        ]);
+
+        if (!productsRes.ok) throw new Error("Failed to fetch products");
+        const data = await productsRes.json();
 
         // Transform API data to match component interfaces
         const transformedServices: Service[] = data.products.map((p: {
@@ -102,6 +120,12 @@ export function BookingWizard() {
 
         setServices(transformedServices);
         setAddons(transformedAddons);
+
+        // Check if payments are enabled
+        if (settingsRes.ok) {
+          const settings = await settingsRes.json();
+          setPaymentsEnabled(settings.paymentsEnabled === true);
+        }
       } catch (err) {
         setError("Failed to load services. Please refresh the page.");
         console.error(err);
@@ -110,7 +134,7 @@ export function BookingWizard() {
       }
     }
 
-    fetchProducts();
+    fetchData();
   }, []);
 
   const updateBookingData = (data: Partial<BookingData>) => {
@@ -141,12 +165,14 @@ export function BookingWizard() {
   const handleNext = () => {
     if (canProceed() && currentStep < STEPS.length) {
       setCurrentStep(currentStep + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -165,23 +191,32 @@ export function BookingWizard() {
       const scheduledEndDate = new Date(scheduledDate);
       scheduledEndDate.setMinutes(scheduledEndDate.getMinutes() + totalDuration);
 
+      // Build booking payload - include status/paymentStatus when payments disabled
+      const bookingPayload: Record<string, unknown> = {
+        productId: bookingData.service.id,
+        customerName: bookingData.customerName,
+        customerEmail: bookingData.customerEmail,
+        customerPhone: bookingData.customerPhone,
+        locationType: bookingData.locationType,
+        address: bookingData.address,
+        addressNotes: bookingData.addressNotes || undefined,
+        scheduledDate: formatLocalDateTime(scheduledDate),
+        scheduledEndDate: formatLocalDateTime(scheduledEndDate),
+        totalPrice: totalPrice.toFixed(2),
+        totalDurationMinutes: totalDuration,
+        addonIds: bookingData.addons.map((a) => a.id),
+      };
+
+      // If payments disabled, create as confirmed immediately
+      if (!paymentsEnabled) {
+        bookingPayload.status = "confirmed";
+        bookingPayload.paymentStatus = "paid";
+      }
+
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: bookingData.service.id,
-          customerName: bookingData.customerName,
-          customerEmail: bookingData.customerEmail,
-          customerPhone: bookingData.customerPhone,
-          locationType: bookingData.locationType,
-          address: bookingData.address,
-          addressNotes: bookingData.addressNotes || undefined,
-          scheduledDate: scheduledDate.toISOString(),
-          scheduledEndDate: scheduledEndDate.toISOString(),
-          totalPrice: totalPrice.toFixed(2),
-          totalDurationMinutes: totalDuration,
-          addonIds: bookingData.addons.map((a) => a.id),
-        }),
+        body: JSON.stringify(bookingPayload),
       });
 
       if (!response.ok) {
@@ -189,9 +224,14 @@ export function BookingWizard() {
         throw new Error(data.error || "Failed to create booking");
       }
 
-      const booking = await response.json();
-      // Redirect to checkout
-      window.location.href = `/api/checkout/${booking.id}`;
+      // Redirect based on payment status
+      if (paymentsEnabled) {
+        const booking = await response.json();
+        window.location.href = `/api/checkout/${booking.id}`;
+      } else {
+        // Skip checkout, go directly to success
+        window.location.href = "/booking/success";
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit booking");
       setIsSubmitting(false);

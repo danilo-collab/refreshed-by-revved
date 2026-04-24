@@ -15,19 +15,6 @@ interface DateTimeSelectionProps {
   locationType: LocationType;
 }
 
-const TIME_SLOTS = [
-  "08:00",
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-];
-
 export function DateTimeSelection({
   selectedDate,
   selectedTime,
@@ -37,6 +24,7 @@ export function DateTimeSelection({
   locationType,
 }: DateTimeSelectionProps) {
   const [weekOffset, setWeekOffset] = useState(0);
+  const [slots, setSlots] = useState<string[]>([]);
   const [availability, setAvailability] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
   const today = startOfToday();
@@ -59,14 +47,13 @@ export function DateTimeSelection({
 
       if (res.ok) {
         const data = await res.json();
+        setSlots(data.slots || []);
         setAvailability(data.availability);
       }
     } catch (error) {
       console.error("Failed to fetch availability:", error);
-      // On error, show all slots as available
-      const allAvailable: Record<string, boolean> = {};
-      TIME_SLOTS.forEach((slot) => (allAvailable[slot] = true));
-      setAvailability(allAvailable);
+      setSlots([]);
+      setAvailability({});
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +143,7 @@ export function DateTimeSelection({
           </div>
 
           <div className="grid grid-cols-5 gap-2">
-            {TIME_SLOTS.map((time) => {
+            {slots.map((time) => {
               const isSelected = selectedTime === time;
               const isAvailable = availability[time] !== false;
               return (

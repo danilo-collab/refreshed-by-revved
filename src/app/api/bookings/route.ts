@@ -15,12 +15,16 @@ const bookingSchema = z.object({
   locationType: z.enum(["store", "customer"]).default("customer"),
   address: z.string().min(1),
   addressNotes: z.string().optional(),
-  scheduledDate: z.string().datetime(),
-  scheduledEndDate: z.string().datetime(),
+  // Accept local datetime format (no 'Z' suffix) to avoid timezone conversion
+  scheduledDate: z.string().refine((s) => !isNaN(Date.parse(s)), "Invalid date"),
+  scheduledEndDate: z.string().refine((s) => !isNaN(Date.parse(s)), "Invalid date"),
   totalPrice: z.string().or(z.number()),
   totalDurationMinutes: z.number().int().positive(),
   addonIds: z.array(z.string()).optional(),
   notes: z.string().optional(),
+  // Optional: allow direct booking when payments disabled
+  status: z.enum(["pending", "confirmed"]).optional(),
+  paymentStatus: z.enum(["pending", "paid"]).optional(),
 });
 
 // GET /api/bookings - List bookings (admin only)
@@ -102,8 +106,9 @@ export async function POST(request: NextRequest) {
         totalDurationMinutes: data.totalDurationMinutes,
         addonIds: data.addonIds || [],
         notes: data.notes,
-        status: "pending",
-        paymentStatus: "pending",
+        // Use provided status/paymentStatus (for direct booking) or default to pending
+        status: data.status || "pending",
+        paymentStatus: data.paymentStatus || "pending",
       })
       .returning();
 
