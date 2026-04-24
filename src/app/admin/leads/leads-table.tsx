@@ -61,9 +61,6 @@ export function LeadsTable({ leads: initialLeads }: LeadsTableProps) {
               <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-on-surface-variant">
                 Status
               </th>
-              <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                Request
-              </th>
               <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-on-surface-variant">
                 Actions
               </th>
@@ -95,9 +92,6 @@ export function LeadsTable({ leads: initialLeads }: LeadsTableProps) {
                   >
                     {lead.status}
                   </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-on-surface-variant max-w-[200px] truncate normal-case not-italic">
-                  {lead.message}
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center justify-end gap-2">
