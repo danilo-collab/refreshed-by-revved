@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { format, addDays, isSameDay, startOfToday } from "date-fns";
+import { parseWallClock } from "@/lib/date";
 import {
   ArrowLeft,
   Calendar,
@@ -170,8 +171,15 @@ export default function BookingEditPage({
         const newEnd = new Date(newStart);
         newEnd.setMinutes(newEnd.getMinutes() + booking.totalDurationMinutes);
 
-        body.scheduledDate = newStart.toISOString();
-        body.scheduledEndDate = newEnd.toISOString();
+        // Send naive wall-clock (no tz) so DB stores exactly what user picked
+        const pad = (n: number) => String(n).padStart(2, "0");
+        const toWallClock = (d: Date) =>
+          `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
+            d.getHours()
+          )}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+
+        body.scheduledDate = toWallClock(newStart);
+        body.scheduledEndDate = toWallClock(newEnd);
       }
 
       if (Object.keys(body).length === 0) {
@@ -304,13 +312,13 @@ export default function BookingEditPage({
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <Calendar className="size-5 text-primary-container" />
-              <span>{format(new Date(booking.scheduledDate), "EEEE, MMMM d, yyyy")}</span>
+              <span>{format(parseWallClock(booking.scheduledDate), "EEEE, MMMM d, yyyy")}</span>
             </div>
             <div className="flex items-center gap-3">
               <Clock className="size-5 text-primary-container" />
               <span>
-                {format(new Date(booking.scheduledDate), "h:mm a")} -{" "}
-                {format(new Date(booking.scheduledEndDate), "h:mm a")}
+                {format(parseWallClock(booking.scheduledDate), "h:mm a")} -{" "}
+                {format(parseWallClock(booking.scheduledEndDate), "h:mm a")}
               </span>
             </div>
             <div className="pt-2 border-t border-outline-variant">
@@ -477,8 +485,8 @@ export default function BookingEditPage({
             </div>
           ) : (
             <p className="text-on-surface-variant text-sm">
-              Current: {format(new Date(booking.scheduledDate), "MMM d, yyyy")} at{" "}
-              {format(new Date(booking.scheduledDate), "h:mm a")}
+              Current: {format(parseWallClock(booking.scheduledDate), "MMM d, yyyy")} at{" "}
+              {format(parseWallClock(booking.scheduledDate), "h:mm a")}
             </p>
           )}
         </div>

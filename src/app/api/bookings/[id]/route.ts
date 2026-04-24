@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { eq, and, gte, lt, ne } from "drizzle-orm";
 import { z } from "zod";
 import { sendRescheduleNotification } from "@/lib/email";
+import { parseWallClock } from "@/lib/date";
 
 type LocationType = "store" | "customer";
 const TRAVEL_GAP_MINUTES = 30;
@@ -60,11 +61,16 @@ function hasConflict(
   return false;
 }
 
+// Naive local wall-clock "YYYY-MM-DDTHH:mm:ss" (no 'Z'/offset) to avoid tz drift.
+const wallClockSchema = z
+  .string()
+  .refine((s) => !isNaN(Date.parse(s)), "Invalid date");
+
 const updateSchema = z.object({
   status: z.enum(["pending", "confirmed", "in_progress", "completed", "cancelled"]).optional(),
   paymentStatus: z.enum(["pending", "paid", "failed", "refunded"]).optional(),
-  scheduledDate: z.string().datetime().optional(),
-  scheduledEndDate: z.string().datetime().optional(),
+  scheduledDate: wallClockSchema.optional(),
+  scheduledEndDate: wallClockSchema.optional(),
 });
 
 // GET /api/bookings/[id]
@@ -144,17 +150,18 @@ export async function PATCH(
 
     // Handle rescheduling
     if (parsed.data.scheduledDate && parsed.data.scheduledEndDate) {
-      const newStart = new Date(parsed.data.scheduledDate);
-      const newEnd = new Date(parsed.data.scheduledEndDate);
+      const newStartStr = parsed.data.scheduledDate;
+      const newEndStr = parsed.data.scheduledEndDate;
+      const newStart = parseWallClock(newStartStr);
+      const newEnd = parseWallClock(newEndStr);
       const locationType = (currentBooking.locationType || "customer") as LocationType;
 
-      // Check availability (exclude this booking)
-      const dayStart = new Date(newStart);
-      dayStart.setHours(0, 0, 0, 0);
-      const dayEnd = new Date(newStart);
-      dayEnd.setHours(23, 59, 59, 999);
+      // Day bounds as wall-clock strings for DB comparison (ISO-like = lexicographic)
+      const dayPrefix = newStartStr.slice(0, 10);
+      const dayStartStr = `${dayPrefix}T00:00:00`;
+      const dayEndStr = `${dayPrefix}T23:59:59.999`;
 
-      const existingBookings = await db
+      const existingRaw = await db
         .select({
           scheduledDate: bookings.scheduledDate,
           scheduledEndDate: bookings.scheduledEndDate,
@@ -163,25 +170,28 @@ export async function PATCH(
         .from(bookings)
         .where(
           and(
-            gte(bookings.scheduledDate, dayStart),
-            lt(bookings.scheduledDate, dayEnd),
+            gte(bookings.scheduledDate, dayStartStr),
+            lt(bookings.scheduledDate, dayEndStr),
             ne(bookings.status, "cancelled"),
-            ne(bookings.id, id) // Exclude current booking
+            ne(bookings.id, id)
           )
         );
 
-      // Check business hours
-      const businessEnd = new Date(newStart);
-      businessEnd.setHours(18, 0, 0, 0);
+      const existingBookings = existingRaw.map((e) => ({
+        scheduledDate: parseWallClock(e.scheduledDate),
+        scheduledEndDate: parseWallClock(e.scheduledEndDate),
+        locationType: e.locationType,
+      }));
 
-      if (newEnd > businessEnd) {
+      // Business hours: compare as strings (all same day prefix → chronological)
+      const businessEndStr = `${dayPrefix}T18:00:00`;
+      if (newEndStr > businessEndStr) {
         return NextResponse.json(
           { error: "Booking extends past business hours (6 PM)" },
           { status: 400 }
         );
       }
 
-      // Check conflicts
       if (hasConflict(newStart, newEnd, locationType, existingBookings)) {
         return NextResponse.json(
           { error: "Time slot conflicts with existing booking" },
@@ -189,8 +199,8 @@ export async function PATCH(
         );
       }
 
-      updateData.scheduledDate = newStart;
-      updateData.scheduledEndDate = newEnd;
+      updateData.scheduledDate = newStartStr;
+      updateData.scheduledEndDate = newEndStr;
       updateData.status = "pending"; // Reset to pending on reschedule
       isRescheduled = true;
     }
@@ -218,7 +228,7 @@ export async function PATCH(
           customerName: currentBooking.customerName,
           customerEmail: currentBooking.customerEmail,
           serviceName: currentBooking.product.name,
-          scheduledDate: new Date(parsed.data.scheduledDate!),
+          scheduledDate: parseWallClock(parsed.data.scheduledDate!),
           address: currentBooking.address,
           locationType: currentBooking.locationType as "store" | "customer",
         });

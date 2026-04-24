@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { bookings } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
 import { BookingActions } from "@/components/admin/booking-actions";
+import { parseWallClock } from "@/lib/date";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/20 text-yellow-500",
@@ -62,11 +63,11 @@ export default async function AdminBookingsPage() {
                 <div className="flex items-center gap-4 mt-2 text-sm text-on-surface-variant">
                   <span className="flex items-center gap-1">
                     <Calendar className="size-4" />
-                    {format(new Date(booking.scheduledDate), "MMM d, yyyy")}
+                    {format(parseWallClock(booking.scheduledDate), "MMM d, yyyy")}
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="size-4" />
-                    {format(new Date(booking.scheduledDate), "h:mm a")}
+                    {format(parseWallClock(booking.scheduledDate), "h:mm a")}
                   </span>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { bookings } from "@/lib/db/schema";
 import { and, gte, lt, ne } from "drizzle-orm";
+import { parseWallClock } from "@/lib/date";
 
 type LocationType = "store" | "customer";
 
@@ -98,26 +99,20 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Parse date as local midnight (not UTC)
-    // "2026-04-25" + "T00:00:00" -> midnight LOCAL time
-    const date = new Date(dateStr + "T00:00:00");
     const duration = parseInt(durationStr, 10);
 
-    if (isNaN(date.getTime()) || isNaN(duration)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr) || isNaN(duration)) {
       return NextResponse.json(
         { error: "Invalid date or duration" },
         { status: 400 }
       );
     }
 
-    // Get start/end of day in LOCAL time
-    const dayStart = new Date(date);
-    dayStart.setHours(0, 0, 0, 0);
-    const dayEnd = new Date(date);
-    dayEnd.setHours(23, 59, 59, 999);
+    // Day bounds as wall-clock strings (ISO-like string compare = chronological)
+    const dayStartStr = `${dateStr}T00:00:00`;
+    const dayEndStr = `${dateStr}T23:59:59.999`;
 
-    // Fetch existing bookings for this day (excluding cancelled)
-    const existingBookings = await db
+    const existingRaw = await db
       .select({
         scheduledDate: bookings.scheduledDate,
         scheduledEndDate: bookings.scheduledEndDate,
@@ -126,34 +121,34 @@ export async function GET(request: NextRequest) {
       .from(bookings)
       .where(
         and(
-          gte(bookings.scheduledDate, dayStart),
-          lt(bookings.scheduledDate, dayEnd),
+          gte(bookings.scheduledDate, dayStartStr),
+          lt(bookings.scheduledDate, dayEndStr),
           ne(bookings.status, "cancelled")
         )
       );
+
+    const existingBookings = existingRaw.map((e) => ({
+      scheduledDate: parseWallClock(e.scheduledDate),
+      scheduledEndDate: parseWallClock(e.scheduledEndDate),
+      locationType: e.locationType,
+    }));
 
     // Check each time slot
     const availability: Record<string, boolean> = {};
 
     for (const slot of TIME_SLOTS) {
-      const [hours, minutes] = slot.split(":").map(Number);
-
-      const proposedStart = new Date(date);
-      proposedStart.setHours(hours, minutes, 0, 0);
-
+      const proposedStart = parseWallClock(`${dateStr}T${slot}:00`);
       const proposedEnd = new Date(proposedStart);
       proposedEnd.setMinutes(proposedEnd.getMinutes() + duration);
 
-      // Check if slot ends after business hours (18:00)
-      const businessEnd = new Date(date);
-      businessEnd.setHours(18, 0, 0, 0);
+      // Business hours end: 18:00 wall-clock
+      const businessEnd = parseWallClock(`${dateStr}T18:00:00`);
 
       if (proposedEnd > businessEnd) {
         availability[slot] = false;
         continue;
       }
 
-      // Check conflicts
       availability[slot] = !hasConflict(
         proposedStart,
         proposedEnd,
