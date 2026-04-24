@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   Mail,
   Phone,
-  Calendar,
   Save,
   Loader2,
   Image as ImageIcon,
@@ -120,15 +119,6 @@ export function LeadDetail({ lead: initialLead }: LeadDetailProps) {
                   )}
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Calendar className="size-5 text-primary-container" />
-                <div>
-                  <p className="text-xs text-outline uppercase tracking-wider">
-                    Source
-                  </p>
-                  <span className="capitalize">{lead.source?.replace("_", " ")}</span>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -173,21 +163,19 @@ export function LeadDetail({ lead: initialLead }: LeadDetailProps) {
           {/* Status */}
           <div className="machined-border bg-surface-container-low p-6">
             <h2 className="text-lg font-bold mb-4">Status</h2>
-            <div className="space-y-2">
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as typeof status)}
+              className={`w-full px-4 py-3 bg-surface-container machined-border font-bold text-sm uppercase tracking-wider focus:border-primary-container focus:outline-none transition-colors cursor-pointer ${
+                statusOptions.find((o) => o.value === status)?.color || ""
+              }`}
+            >
               {statusOptions.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => setStatus(option.value as typeof status)}
-                  className={`w-full px-4 py-3 text-left font-bold text-sm uppercase tracking-wider transition-colors ${
-                    status === option.value
-                      ? option.color + " border border-current"
-                      : "bg-surface-container hover:bg-surface-container-high"
-                  }`}
-                >
+                <option key={option.value} value={option.value}>
                   {option.label}
-                </button>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
           {/* Notes */}
