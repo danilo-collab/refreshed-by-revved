@@ -14,6 +14,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^1.1.0
         version: 1.1.0
+      '@remotion/player':
+        specifier: ^4.0.451
+        version: 4.0.451(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@square/web-sdk':
         specifier: ^2.1.0
         version: 2.1.0
@@ -56,6 +59,9 @@ importers:
       react-dom:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
+      remotion:
+        specifier: ^4.0.451
+        version: 4.0.451(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       shadcn:
         specifier: ^4.4.0
         version: 4.4.0(@types/node@20.19.39)(typescript@5.9.3)
@@ -1249,6 +1255,12 @@ packages:
     resolution: {integrity: sha512-PG6q63nQg5c9rIi4/Z5lR5IVF7yU5MqmKaPOe0HSc0O2cX1fPi96sUQu5j7eo4gKCkB2AnNGoWt7y4/Xx3Kcqg==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@remotion/player@4.0.451':
+    resolution: {integrity: sha512-mJSaWHsMQuDXVVVh6UVBySBzzzqeSI+MHUuS+6hk/CrqZwBz1CQnsrtFZcjcnBpY40ao+ZqMA6uTEgs9n34YlQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   '@rolldown/binding-android-arm64@1.0.0-rc.17':
     resolution: {integrity: sha512-s70pVGhw4zqGeFnXWvAzJDlvxhlRollagdCCKRgOsgUOH3N1l0LIxf83AtGzmb5SiVM4Hjl5HyarMRfdfj3DaQ==}
@@ -3601,6 +3613,12 @@ packages:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
 
+  remotion@4.0.451:
+    resolution: {integrity: sha512-uTku1RmytCk50ZtPEoTdmB/4Erb+nH85vT3jkCLWQCaG9qWXxp2XAJ+eL7EfsCUyast2umZm4vdrdKXVxbeDMQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
@@ -5157,6 +5175,12 @@ snapshots:
   '@playwright/test@1.59.1':
     dependencies:
       playwright: 1.59.1
+
+  '@remotion/player@4.0.451(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      remotion: 4.0.451(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
 
   '@rolldown/binding-android-arm64@1.0.0-rc.17':
     optional: true
@@ -7543,6 +7567,11 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       set-function-name: 2.0.2
+
+  remotion@4.0.451(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
 
   require-directory@2.1.1: {}
 

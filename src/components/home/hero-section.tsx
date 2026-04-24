@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Player } from "@remotion/player";
 import { Button } from "@/components/ui/button";
 import { ElegantShape } from "@/components/ui/elegant-shape";
+import { GridPixelateWipe } from "@/components/ui/grid-pixelate-wipe";
 
 const fadeUpVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -18,18 +20,100 @@ const fadeUpVariants = {
   }),
 };
 
+function HeroFromPanel() {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "linear-gradient(135deg, #0a0a0a 0%, #0f1419 50%, #0a0a0a 100%)",
+      }}
+    >
+      {/* Cyan accent grid lines */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "60px 60px",
+        }}
+      />
+      {/* Center glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "80%",
+          height: "80%",
+          background: "radial-gradient(ellipse, rgba(0, 240, 255, 0.08) 0%, transparent 60%)",
+        }}
+      />
+    </div>
+  );
+}
+
+function HeroToPanel() {
+  return (
+    <div style={{ position: "absolute", inset: 0 }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage:
+            "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRhTswY1vWyJs20U8WC2MWWaldCnbirzrWoMFKmMtY-YddxTZfRj4DBvhUY-C4b8WZC8zkWknbQ5qIR03shouO1xylT-HLYv3I1wHkUUDE9FNSTb3_RnR0zaTubtVjl8pUkZDA5rzOsYO2DEJyfLgwFjoXBM9NkRxMcMuIXWMsQhfQW_z4hhcy-1ZpE5sX4YeLw41uV-cekm0-f3qADzRIzYAo3ewcFgndg_ifoWslLFVMZQeQLDm5ACCIOsj3Fj0ZEvnxX7tbdGk')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      {/* Left gradient overlay for text readability */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to right, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.7) 40%, transparent 70%)",
+        }}
+      />
+    </div>
+  );
+}
+
+function HeroBackgroundScene() {
+  return (
+    <GridPixelateWipe
+      cols={16}
+      rows={9}
+      pattern="wave"
+      transitionStart={20}
+      transitionDuration={50}
+      cellFadeFrames={6}
+      from={<HeroFromPanel />}
+      to={<HeroToPanel />}
+    />
+  );
+}
+
 export function HeroSection() {
   return (
     <section className="relative min-h-0 py-8 md:py-12 flex items-center overflow-hidden">
-      {/* Background Image */}
+      {/* Pixelate Wipe Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent z-10" />
-        <div
-          className="w-full h-full bg-center bg-cover"
-          style={{
-            backgroundImage:
-              "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBRhTswY1vWyJs20U8WC2MWWaldCnbirzrWoMFKmMtY-YddxTZfRj4DBvhUY-C4b8WZC8zkWknbQ5qIR03shouO1xylT-HLYv3I1wHkUUDE9FNSTb3_RnR0zaTubtVjl8pUkZDA5rzOsYO2DEJyfLgwFjoXBM9NkRxMcMuIXWMsQhfQW_z4hhcy-1ZpE5sX4YeLw41uV-cekm0-f3qADzRIzYAo3ewcFgndg_ifoWslLFVMZQeQLDm5ACCIOsj3Fj0ZEvnxX7tbdGk')",
-          }}
+        <Player
+          component={HeroBackgroundScene}
+          durationInFrames={120}
+          fps={30}
+          compositionWidth={1920}
+          compositionHeight={1080}
+          controls={false}
+          autoPlay
+          loop
+          clickToPlay={false}
+          acknowledgeRemotionLicense
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </div>
 
