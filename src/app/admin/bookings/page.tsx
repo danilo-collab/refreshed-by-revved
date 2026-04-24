@@ -1,35 +1,10 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
-import { Calendar, Clock, MapPin, User, Phone, Mail } from "lucide-react";
-
-// Mock data - would come from API
-const mockBookings = [
-  {
-    id: "1",
-    customerName: "John Smith",
-    customerEmail: "john@example.com",
-    customerPhone: "(305) 555-1234",
-    address: "123 Ocean Drive, Miami Beach, FL",
-    serviceName: "VIP Showroom Detail",
-    scheduledDate: new Date(2024, 3, 25, 10, 0),
-    totalPrice: 284.99,
-    status: "confirmed",
-    paymentStatus: "paid",
-  },
-  {
-    id: "2",
-    customerName: "Maria Garcia",
-    customerEmail: "maria@example.com",
-    customerPhone: "(305) 555-5678",
-    address: "456 Brickell Ave, Miami, FL",
-    serviceName: "Full Detail",
-    scheduledDate: new Date(2024, 3, 25, 14, 0),
-    totalPrice: 179.99,
-    status: "pending",
-    paymentStatus: "pending",
-  },
-];
+import { Calendar, Clock, MapPin, User, Phone, Mail, CalendarX } from "lucide-react";
+import { db } from "@/lib/db";
+import { bookings } from "@/lib/db/schema";
+import { desc } from "drizzle-orm";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/20 text-yellow-500",
@@ -46,6 +21,12 @@ export default async function AdminBookingsPage() {
     redirect("/admin/login");
   }
 
+  // Fetch bookings with product relation
+  const bookingsList = await db.query.bookings.findMany({
+    with: { product: true },
+    orderBy: [desc(bookings.scheduledDate)],
+  });
+
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
@@ -57,8 +38,17 @@ export default async function AdminBookingsPage() {
         </div>
       </div>
 
+      {bookingsList.length === 0 ? (
+        <div className="machined-border bg-surface-container-low p-12 text-center">
+          <CalendarX className="size-12 text-outline mx-auto mb-4" />
+          <h3 className="text-xl font-bold mb-2">No bookings yet</h3>
+          <p className="text-on-surface-variant normal-case not-italic">
+            Bookings will appear here when customers schedule appointments.
+          </p>
+        </div>
+      ) : (
       <div className="space-y-4">
-        {mockBookings.map((booking) => (
+        {bookingsList.map((booking) => (
           <div
             key={booking.id}
             className="machined-border bg-surface-container-low p-6"
@@ -66,16 +56,16 @@ export default async function AdminBookingsPage() {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h3 className="text-xl font-bold not-italic normal-case">
-                  {booking.serviceName}
+                  {booking.product.name}
                 </h3>
                 <div className="flex items-center gap-4 mt-2 text-sm text-on-surface-variant">
                   <span className="flex items-center gap-1">
                     <Calendar className="size-4" />
-                    {format(booking.scheduledDate, "MMM d, yyyy")}
+                    {format(new Date(booking.scheduledDate), "MMM d, yyyy")}
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="size-4" />
-                    {format(booking.scheduledDate, "h:mm a")}
+                    {format(new Date(booking.scheduledDate), "h:mm a")}
                   </span>
                 </div>
               </div>
@@ -88,7 +78,7 @@ export default async function AdminBookingsPage() {
                   {booking.status.replace("_", " ")}
                 </span>
                 <p className="text-2xl font-bold text-primary-container mt-2">
-                  ${booking.totalPrice.toFixed(2)}
+                  ${parseFloat(booking.totalPrice).toFixed(2)}
                 </p>
               </div>
             </div>
@@ -118,6 +108,7 @@ export default async function AdminBookingsPage() {
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 }
